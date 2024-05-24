@@ -2,18 +2,22 @@
 - WAZUH installation 
 - Wazuh is a comprehensive open-source security monitoring platform that includes features for intrusion detection, vulnerability detection, configuration assessment, and more.  Setting up Wazuh on an Ubuntu server involves installing both the Wazuh manager and the Wazuh agent.
 
-- Here's a step-by-step guide to installing Wazuh on an Ubuntu server:
+- Here's a step-by-step guide to installing Wazuh on a kali linux server:
 - install the following packages if missing.
 - apt-get install gnupg apt-transport-https
-  <br> "https://github.com/collinsbigomba/SIEMS/blob/main/images/waz.png"</br>
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz.png"></br>
 - Install the GPG key.
 - curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz1.png"></br>
 - Add the repository.
 - echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz2.png"></br>
 - Update the packages information.
 - apt-get update
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz3.png"></br>
 ## Installing the Wazuh manager
 - apt-get -y install wazuh-manager
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz4.png"></br>
 - Enable and start the Wazuh manager service.
 - systemctl daemon-reload
 - systemctl enable wazuh-manager
