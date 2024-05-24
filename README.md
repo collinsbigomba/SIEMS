@@ -59,6 +59,7 @@
 - chmod 500 /etc/filebeat/certs
 - chmod 400 /etc/filebeat/certs/*
 - chown -R root:root /etc/filebeat/certs
+  
 ## Starting the Filebeat service
 - Enable and start the Filebeat service.
 - systemctl daemon-reload
