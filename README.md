@@ -48,6 +48,60 @@
 - Install the Wazuh module for Filebeat.
 - curl -s https://packages.wazuh.com/4.x/filebeat/wazuh-filebeat-0.3.tar.gz | tar -xvz -C /usr/share/filebeat/module
 - Deploying certificates
+  ## Generating wazuh certifiates
+- When generating Wazuh certificates on Kali Linux, you may encounter issues related to missing dependencies, incorrect paths, or permission errors. Here’s a detailed guide to help you generate the necessary certificates correctly.
+- Install Dependencies
+- sudo apt update
+- sudo apt install openssl -y
+- Create the Required Directories
+- Navigate to the Wazuh configuration directory and create the necessary directories for storing the certificates:
+- cd /var/ossec/etc
+- sudo mkdir -p sslmanager/{ca,certs,keys}
+- Generate the CA (Certificate Authority) certificate, which is used to sign the server certificate:
+- sudo openssl genpkey -algorithm RSA -out sslmanager/ca/ca-key.pem
+- sudo openssl req -x509 -new -nodes -key sslmanager/ca/ca-key.pem -sha256 -days 3650 -out sslmanager/ca/ca.pem -subj "/C=US/ST=California/L=San Francisco/O=Wazuh/OU=Security/CN=ca.wazuh.com"
+- Generate the Server Certificate
+- Generate the private key for the server, create a certificate signing request (CSR), and sign the server certificate with the CA certificate:
+- Generate the server private key:
+- sudo openssl genpkey -algorithm RSA -out sslmanager/keys/wazuh-server-key.pem
+- Create a CSR (Certificate Signing Request):
+- sudo openssl req -new -key sslmanager/keys/wazuh-server-key.pem -out sslmanager/certs/wazuh-server.csr -subj "/C=US/ST=California/L=San Francisco/O=Wazuh/OU=Security/CN=<SERVER_NODE_NAME>"
+- Replace <SERVER_NODE_NAME> with the actual name of your server node.
+- Sign the server certificate with the CA certificate:
+- sudo openssl x509 -req -in sslmanager/certs/wazuh-server.csr -CA sslmanager/ca/ca.pem -CAkey sslmanager/ca/ca-key.pem -CAcreateserial -out sslmanager/certs/wazuh-server.pem -days 3650 -sha256
+- Package the Certificates into a Tar File
+- Package the generated certificates into a tar file for easier transfer and management:
+- sudo tar -cvf wazuh-certificates.tar -C sslmanager/ .
+- Move the Certificates to Their Corresponding Locations
+- Move the generated certificates to the appropriate locations within the Wazuh configuration directory:
+- sudo mv sslmanager/ca/ca.pem /var/ossec/etc/sslmanager/
+- Move the server certificate and key:
+- sudo mv sslmanager/certs/wazuh-server.pem /var/ossec/etc/sslmanager/wazuh-server.pem
+- sudo mv sslmanager/keys/wazuh-server-key.pem /var/ossec/etc/sslmanager/wazuh-server-key.pem
+- Set Correct Permissions
+- Ensure the certificates have the correct permissions so that Wazuh can access them:
+- sudo chown wazuh:wazuh /var/ossec/etc/sslmanager/ca.pem
+- sudo chown wazuh:wazuh /var/ossec/etc/sslmanager/wazuh-server.pem
+- sudo chown wazuh:wazuh /var/ossec/etc/sslmanager/wazuh-server-key.pem
+- sudo chmod 640 /var/ossec/etc/sslmanager/ca.pem
+- sudo chmod 640 /var/ossec/etc/sslmanager/wazuh-server.pem
+- sudo chmod 640 /var/ossec/etc/sslmanager/wazuh-server-key.pem
+- Update config.yml
+- Update the Wazuh configuration file to use the newly generated certificates:
+- sudo nano /var/ossec/etc/config.yml
+- Update the SSL configuration section with the correct paths:
+  
+- yaml
+
+- ssl:
+  - enabled: true
+  - ca: /var/ossec/etc/sslmanager/ca.pem
+  - cert: /var/ossec/etc/sslmanager/wazuh-server.pem
+  - key: /var/ossec/etc/sslmanager/wazuh-server-key.pem
+
+- Restart the Wazuh manager to apply the changes:
+- sudo systemctl restart wazuh-manager
+-  
   ## NB
 - Make sure that a copy of the wazuh-certificates.tar file, created during the initial configuration step, is placed in your working directory.
 - Replace <SERVER_NODE_NAME> with your Wazuh server node certificate name, the same one used in config.yml when creating the certificates. Then, move the certificates to their corresponding location.
