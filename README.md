@@ -2,8 +2,7 @@
 - WAZUH installation 
 - Wazuh is a comprehensive open-source security monitoring platform that includes features for intrusion detection, vulnerability detection, configuration assessment, and more.  Setting up Wazuh on an Ubuntu server involves installing both the Wazuh manager and the Wazuh agent.
 - Here's a step-by-step guide to installing Wazuh on a kali linux server:
-- install the following packages if missing.
-- apt-get install gnupg apt-transport-https
+- install the following packages if missing with "apt-get install gnupg apt-transport-https"
   <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz.png"></br>
 - Install the GPG key.
 - curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
@@ -11,8 +10,7 @@
 - Add the repository.
 - echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
   <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz2.png"></br>
-- Update the packages information.
-- apt-get update
+- Update the packages information with "apt-get update"
   <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz3.png"></br>
 ## Installing the Wazuh manager
 - apt-get -y install wazuh-manager
@@ -21,11 +19,12 @@
 - systemctl daemon-reload
 - systemctl enable wazuh-manager
 - systemctl start wazuh-manager
-- Run the following command to verify the Wazuh manager status.
-- systemctl status wazuh-manager 
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz5.png"></br>
+- Run the following command to verify the Wazuh manager status "systemctl status wazuh-manager"
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz6.png"></br>
 ## Installing Filebeat
-- Install the Filebeat package.
-- apt-get -y install filebeat
+- Install the Filebeat package using the command apt-get -y install filebeat
+  <br><img src="https://github.com/collinsbigomba/SIEMS/blob/main/images/waz7.png"></br>
 - Configuring Filebeat
 - Download the preconfigured Filebeat configuration file.
 - curl -so /etc/filebeat/filebeat.yml https://packages.wazuh.com/4.7/tpl/wazuh/filebeat/filebeat.yml
