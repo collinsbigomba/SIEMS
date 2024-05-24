@@ -5,6 +5,7 @@
 - Here's a step-by-step guide to installing Wazuh on an Ubuntu server:
 - install the following packages if missing.
 - apt-get install gnupg apt-transport-https
+  <br> "https://github.com/collinsbigomba/SIEMS/blob/main/images/waz.png"</br>
 - Install the GPG key.
 - curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
 - Add the repository.
